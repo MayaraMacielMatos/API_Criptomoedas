@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+        <title>CoinMarketCap</title>
+    </head>
+
+    <body>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Coin Market Cap</li>
+            </ol>
+        </nav>
+        
+        <div class="d-flex p-3 bd-highlight">
+            <div id='coins'></div>
+        </div>
+
+        <script type="text/javascript">
+            //Minha API KEY
+            var apikey = {
+                key: 'e86304fb-16d8-4d04-803c-e742b7507577'
+            }
+            //fetch requisição
+            fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?CMC_PRO_API_KEY=' + 
+                apikey.key)
+                .then((response) => {
+                    if(!response.ok) 
+                    throw new Error('Erro ao executar a requisição, status' + response.status);
+                    return response.json();
+            })
+
+            .then((api) => {
+
+                var texto = "";
+
+                for(let i = 0; i < 10; i++) {
+
+                    texto = texto + `
+                    
+                    <div class="media">
+                        <img src="coin.jpg" class="align-center mr-3" alt="coin" width="100" height="60"></img>
+                        <div class="media-body">
+                            <h5 class="mt-2">${api.date[i].name}</h5>
+                            <p>${api.date[i].symbol}</p>
+                            <p>${api.date[i].first_historical_data}</p>
+                        </div>
+                    </div>
+
+                    `;
+
+                    document.getElementById("coins").innerHTML = texto;
+
+                }
+            })
+
+            .catch((error) => {
+                console.error(error.message);
+            });
+
+        </script>
+    </body>
+</html>
